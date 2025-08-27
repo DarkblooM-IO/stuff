@@ -3,15 +3,18 @@ import argparse, re, sys
 
 parser = argparse.ArgumentParser(prog="grep")
 parser.add_argument("pattern", help="Regex to search for")
-parser.add_argument("file", help="File to search through")
+parser.add_argument("file",    help="File to search through")
 args = parser.parse_args()
 
 def main() -> int:
     file = None
     try:
         file = open(args.file, "r")
+    except IsADirectoryError:
+        print(f"{args.file} is a directory", file=sys.stderr)
+        return 1
     except FileNotFoundError:
-        print(f"couldn't find file {args.file}")
+        print(f"couldn't find file {args.file}", file=sys.stderr)
         return 1
 
     pattern = re.compile(args.pattern)
