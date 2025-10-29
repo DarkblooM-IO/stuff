@@ -20,7 +20,7 @@ class Player:
         return "\n".join(str(c) for c in self.deck)
 
 def main():
-    print(Player())
+    pass
 
 if __name__ == "__main__":
     main()
