@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-#######
-# WIP #
-#######
+### WIP ###
 
 import random
 
@@ -17,13 +15,9 @@ class Card:
 class Player:
     def __init__(self):
         self.deck = [Card() for _ in range(7)]
-        self.sortDeck()
 
     def __str__(self):
-        return "\n".join(self.deck)
-
-    def sortDeck(self):
-        self.deck = self.deck.sort(key=lambda card: card.value)
+        return "\n".join(str(c) for c in self.deck)
 
 def main():
     print(Player())
