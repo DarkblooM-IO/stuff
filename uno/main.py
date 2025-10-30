@@ -19,6 +19,9 @@ class Player:
     def __str__(self):
         return "\n".join(str(c) for c in self.deck)
 
+    def sortDeck(self): # sorts only by value for now, should sort by color first, then sort colors by value
+        self.deck = sorted(self.deck, key=lambda card: card.value)
+
 def main():
     pass
 
