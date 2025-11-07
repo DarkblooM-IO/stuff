@@ -13,3 +13,12 @@ def gcd(x: int, y: int) -> int:
             continue
         cd.append(i)
     return sorted(cd, reverse=True)[0]
+
+def collatz(x: int) -> list[int]:
+    if x < 1:
+        raise ValueError("x must be positive")
+    out = []
+    while x > 1:
+        out.append(x)
+        x = int(x / 2 if x % 2 == 0 else x * 3 + 1)
+    return out
