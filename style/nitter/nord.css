@@ -1,0 +1,32 @@
+/*
+Nord theme for Nitter (https://nitter.net/)
+*/
+body {
+  --bg_color: #3b4252;
+  --fg_dark: #81a1c1;
+  --fg_nav: var(--fg_dark);
+  --bg_panel: #434c5e;
+  --bg_elements: #434c5e;
+  --bg_overlays: #2e3440;
+  --bg_hover: var(--bg_panel);
+  --grey: #d8dee9;
+  --dark_grey: #2e3440;
+  --darker_grey: var(--grey);
+  --darkest_grey: var(--bg_panel);
+  --border_grey: #4c566a;
+  --accent: #81a1c1;
+  --accent_light: #5e81ac;
+  --accent_dark: var(--grey);
+  --accent_border: var(--accent);
+  --play_button: var(--accent);
+  --play_button_hover: var(--accent_light);
+  --more_replies_dots: var(--grey);
+  --error_red: #bf616a;
+  --verified_blue: #a3be8c;
+  --verified_business: #ebcb8b;
+  --verified_government: #b48ead;
+  --icon_text: var(--grey);
+  --tab: var(--grey);
+  --tab_selected: var(--accent);
+  --profile_stat: var(--grey);
+}
