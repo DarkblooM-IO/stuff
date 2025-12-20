@@ -1,0 +1,33 @@
+@import url("https://rawcdn.githack.com/DarkblooM-IO/stuff/ebdf7946a715811ed766f3265c4859564b0f4a8b/style/lib/nord.css");
+
+[data-theme="claude"][data-mode="dark"],
+[data-theme="claude"][data-mode="light"] {
+  --bg-000: var(--bg-medium-hsl);
+  --bg-100: var(--bg-dark-hsl);
+  --bg-200: var(--bg-000);
+  --bg-300: var(--bg-medium-hsl);
+  --bg-400: var(--bg-200);
+  --bg-500: var(--accent-main-000);
+
+  --text-000: var(--fg-light-hsl);
+  --text-100: var(--fg-light-hsl);
+  --text-200: var(--fg-dark-hsl);
+  --text-300: var(--text-200);
+  --text-400: var(--text-100);
+  --text-500: var(--text-200);
+
+  --accent-main-000: var(--accent-1-hsl);
+  --accent-main-100: var(--accent-main-000);
+  --accent-secondary-000: var(--accent-3-hsl);
+  --accent-secondary-100: var(--accent-secondary-000);
+  --accent-secondary-200: var(--purple-hsl);
+  --accent-secondary-900: var(--accent-main-000);
+
+  --danger-000: var(--red-hsl);
+  --danger-200: var(--red-hsl);
+  --danger-900: var(--bg-light-hsl);
+
+  --border-100: var(--bg-300);
+  --border-200: var(--bg-300);
+  --border-300: var(--fg-dark-hsl);
+}
