@@ -1,30 +1,29 @@
-/*
-Nord theme for Nitter (https://nitter.net/)
-*/
+@import url("https://rawcdn.githack.com/DarkblooM-IO/stuff/944f586c961fde036e9402893f9d89805a0dc6bb/style/lib/nord.css");
+
 body {
-  --bg_color: #3b4252;
-  --fg_dark: #81a1c1;
+  --bg_color: var(--bg-dark);
+  --fg_dark: var(--accent-1);
   --fg_nav: var(--fg_dark);
-  --bg_panel: #434c5e;
-  --bg_elements: #434c5e;
-  --bg_overlays: #2e3440;
-  --bg_hover: var(--bg_panel);
-  --grey: #d8dee9;
-  --dark_grey: #2e3440;
+  --bg_panel: var(--bg-light);
+  --bg_elements: var(--bg-light);
+  --bg_overlays: var(--bg-medium);
+  --bg_hover: var(--bg_overlays);
+  --grey: var(--fg-light);
+  --dark_grey: var(--grey);
   --darker_grey: var(--grey);
   --darkest_grey: var(--bg_panel);
-  --border_grey: #4c566a;
-  --accent: #81a1c1;
-  --accent_light: #5e81ac;
-  --accent_dark: var(--grey);
+  --border_grey: var(--bg_color);
+  --accent: var(--accent-2);
+  --accent_light: var(--accent-3);
+  --accent_dark: var(--accent-4);
   --accent_border: var(--accent);
   --play_button: var(--accent);
   --play_button_hover: var(--accent_light);
   --more_replies_dots: var(--grey);
-  --error_red: #bf616a;
-  --verified_blue: #a3be8c;
-  --verified_business: #ebcb8b;
-  --verified_government: #b48ead;
+  --error_red: var(--red);
+  --verified_blue: var(--green);
+  --verified_business: var(--yellow);
+  --verified_government: var(--purple);
   --icon_text: var(--grey);
   --tab: var(--grey);
   --tab_selected: var(--accent);
