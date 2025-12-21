@@ -31,3 +31,7 @@
   --border-200: var(--bg-300);
   --border-300: var(--fg-dark-hsl);
 }
+
+.text-\[\#D97757\] path {
+  fill: var(--accent-1);
+}
