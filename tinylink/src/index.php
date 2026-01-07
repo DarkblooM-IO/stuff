@@ -21,7 +21,13 @@ $id = explode("/", ROUTE)[1];
 if (preg_match("/^\d+$/", $id)) {
   $stmt = $db->prepare("SELECT destination FROM redirects WHERE id = :destID");
   $stmt->bindParam(":destID", $id);
-  echo "<pre><code>";
-  print_r($stmt);
-  echo "</code></pre>";
+  $stmt->execute();
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  if ($result) {
+    $destination = $result["destination"];
+    echo "<script>window.location.replace('$destination')</script>";
+  } else {
+    echo "No entry";
+  }
 }
