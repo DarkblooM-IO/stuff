@@ -1,4 +1,5 @@
 <?php
+define("ROUTE", $_SERVER["REQUEST_URI"]);
 define("DBHOST", "localhost");
 define("DBNAME", "tinylink");
 define("DBUSER", "admin");
@@ -15,9 +16,12 @@ try {
   die();
 }
 
-$rows = $db->query("SELECT * from redirects")->fetchAll(PDO::FETCH_ASSOC);
+$id = explode("/", ROUTE)[1];
 
-echo "<table border=1><tr><th>id</th><th>destination</th></tr>";
-foreach ($rows as $row)
-  echo "<tr><td>".$row["id"]."</td><td>".$row["destination"]."</td></tr>";
-echo "</table>";
+if (preg_match("/^\d+$/", $id)) {
+  $stmt = $db->prepare("SELECT destination FROM redirects WHERE id = :destID");
+  $stmt->bindParam(":destID", $id);
+  echo "<pre><code>";
+  print_r($stmt);
+  echo "</code></pre>";
+}
