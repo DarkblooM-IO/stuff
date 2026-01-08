@@ -32,6 +32,7 @@
   --border-300: var(--fg-dark-hsl);
 }
 
-.text-\[\#D97757\] path {
+.text-\[\#D97757\] path,
+svg.fill-current {
   fill: var(--accent-1);
 }
