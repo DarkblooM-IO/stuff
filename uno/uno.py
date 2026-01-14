@@ -1,4 +1,4 @@
-#!/usr/bin/env -S python -OO
+#!/usr/bin/env python
 from cards import *
 import random as rd
 
