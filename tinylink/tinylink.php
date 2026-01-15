@@ -1,9 +1,4 @@
 <?php
-define("DBHOST", "localhost");
-define("DBNAME", "tinylink");
-define("DBUSER", "admin");
-define("DBPASSWORD", getenv("_DBPW"));
-
 function redirect($db, $route) {
   $id = explode("/", $route)[1];
 
@@ -20,11 +15,4 @@ function redirect($db, $route) {
       echo "tinylink: no entry";
     }
   }
-}
-
-try {
-  $db = new PDO("mysql:host=".DBHOST.";dbname=".DBNAME, DBUSER, DBPASSWORD);
-} catch (PDOException $e) {
-  echo "Error: ".$e->getMessage()."<br>";
-  die();
 }
