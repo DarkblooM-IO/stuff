@@ -9,5 +9,5 @@ CREATE TABLE redirects (
   destination VARCHAR(512) NOT NULL
 );
 
--- create example entry
+-- create example entry (remove this for production)
 INSERT INTO redirects (destination) VALUES ('https://example.com');
