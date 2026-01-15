@@ -4,8 +4,8 @@ define("DBNAME", "tinylink");
 define("DBUSER", "admin");
 define("DBPASSWORD", getenv("_DBPW"));
 
-function redirect($db) {
-  $id = explode("/", ROUTE)[1];
+function redirect($db, $route) {
+  $id = explode("/", $route)[1];
 
   if (preg_match("/^\d+$/", $id)) {
     $stmt = $db->prepare("SELECT destination FROM redirects WHERE id = :destID");
