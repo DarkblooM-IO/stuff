@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+#
+# dependencies: tldr, glow
+#
+
+env=/usr/bin/env
+
+[[ $# -eq 0 ]] && { $tldr; exit 0; }
+
+$env tldr -m $@ | $env glow
+
+unset env
+
+exit 0
