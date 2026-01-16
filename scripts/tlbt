@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 #
-# dependencies: tldr, glow
+# dependencies: tldr, glow, sd
 #
 
 env=/usr/bin/env
 
 [[ $# -eq 0 ]] && { $env tldr; exit 0; }
 
-$env tldr -m $@ | $env glow
+$env tldr -m $@ | $env sd '\{\{(.+?)\}\}' '$1' | $env glow
 
 unset env
 
