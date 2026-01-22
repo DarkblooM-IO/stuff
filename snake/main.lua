@@ -7,12 +7,13 @@ CELL_SIZE     = 20
 SCREEN_WIDTH  = lg.getWidth()
 SCREEN_HEIGHT = lg.getHeight()
 DIR           = {UP = "up", LEFT = "left", DOWN = "down", RIGHT = "right"}
+GAME_SPEED    = .2
 
 local snake
 local fruit
 
 function love.load()
-  tick.rate = .1
+  tick.rate = GAME_SPEED
   snake = {
     body = {{0,0}},
     facing = "right",
@@ -43,7 +44,7 @@ function love.update()
 
   -- update snake position
   table.insert(snake.body, 1, newpos)
-  if #snake.body > snake.score then table.remove(snake.body, #snake.body) end
+  if #snake.body > snake.score+1 then table.remove(snake.body, #snake.body) end
 end
 
 function love.draw()
