@@ -12,7 +12,7 @@ local snake
 local fruit
 
 function love.load()
-  tick.rate = .3
+  tick.rate = .1
   snake = {
     body = {{0,0}},
     facing = "right",
@@ -46,6 +46,8 @@ function love.draw()
 end
 
 function love.keypressed(key,scancode)
+  if scancode == "escape" then love.event.quit() end
+
   local f = snake.facing
   if scancode == "w" and f ~= DIR.DOWN  then snake.facing = DIR.UP    end
   if scancode == "a" and f ~= DIR.RIGHT then snake.facing = DIR.LEFT  end
