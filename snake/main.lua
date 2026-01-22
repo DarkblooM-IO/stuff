@@ -8,6 +8,16 @@ SCREEN_WIDTH  = lg.getWidth()
 SCREEN_HEIGHT = lg.getHeight()
 DIR           = {UP = "up", LEFT = "left", DOWN = "down", RIGHT = "right"}
 GAME_SPEED    = .2
+SNAKE_COLOR   = {163,190,140}
+FRUIT_COLOR   = {191,97,106}
+
+local function setColor(rgba)
+  lg.setColor(love.math.colorFromBytes(unpack(rgba)))
+end
+
+local function randomCell()
+  -- do magic
+end
 
 local snake
 local fruit
@@ -15,10 +25,10 @@ local fruit
 function love.load()
   tick.rate = GAME_SPEED
   snake = {
-    body = {{0,0}},
+    body   = {{0,0}},
     facing = "right",
-    score = 0,
-    dead = false
+    score  = 0,
+    dead   = false
   }
   fruit = {4,4}
 end
@@ -27,15 +37,15 @@ function love.update()
   -- don't do anything if dead
   if snake.dead then return end
 
-  local f = snake.facing
+  local f   = snake.facing
   local pos = snake.body[1]
   local newpos
 
   -- create next position based on direction
-  if f == DIR.UP then newpos = {pos[1], pos[2]-1} end
-  if f == DIR.LEFT then newpos = {pos[1]-1, pos[2]} end
-  if f == DIR.DOWN then newpos = {pos[1], pos[2]+1} end
-  if f == DIR.RIGHT then newpos = {pos[1]+1, pos[2]} end
+  if f == DIR.UP    then newpos = {pos[1],   pos[2]-1} end
+  if f == DIR.LEFT  then newpos = {pos[1]-1, pos[2]}   end
+  if f == DIR.DOWN  then newpos = {pos[1],   pos[2]+1} end
+  if f == DIR.RIGHT then newpos = {pos[1]+1, pos[2]}   end
 
   if newpos[1] == fruit[1] and newpos[2] == fruit[2] then
     fruit = {} -- todo: spawn new fruit
@@ -48,22 +58,24 @@ function love.update()
 end
 
 function love.draw()
-  lg.print(snake.score, 10,10)
   local x,y
 
+  -- draw fruit
+  setColor(FRUIT_COLOR)
+  x = fruit[1]*CELL_SIZE
+  y = fruit[2]*CELL_SIZE
+  lg.rectangle("fill", x,y, CELL_SIZE,CELL_SIZE)
+
   -- draw snake
+  setColor(SNAKE_COLOR)
   for _,pos in pairs(snake.body) do
     x = pos[1]*CELL_SIZE
     y = pos[2]*CELL_SIZE
     lg.rectangle("fill", x,y, CELL_SIZE,CELL_SIZE)
   end
 
-  -- draw fruit
-  if #fruit > 1 then
-    x = fruit[1]*CELL_SIZE
-    y = fruit[2]*CELL_SIZE
-    lg.rectangle("fill", x,y, CELL_SIZE,CELL_SIZE)
-  end
+  -- reset color
+  setColor({0,0,0})
 end
 
 function love.keypressed(key,scancode)
