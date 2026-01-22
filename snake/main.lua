@@ -6,7 +6,7 @@ _G.lk = love.keyboard
 CELL_SIZE     = 20
 SCREEN_WIDTH  = lg.getWidth()
 SCREEN_HEIGHT = lg.getHeight()
-DIR = {UP = "up", LEFT = "left", DOWN = "down", RIGHT = "right"}
+DIR           = {UP = "up", LEFT = "left", DOWN = "down", RIGHT = "right"}
 
 local snake
 local fruit
@@ -36,12 +36,18 @@ function love.update()
   if f == DIR.DOWN then newpos = {pos[1], pos[2]+1} end
   if f == DIR.RIGHT then newpos = {pos[1]+1, pos[2]} end
 
+  if newpos[1] == fruit[1] and newpos[2] == fruit[2] then
+    fruit = {} -- todo: spawn new fruit
+    snake.score = snake.score+1
+  end
+
   -- update snake position
   table.insert(snake.body, 1, newpos)
   if #snake.body > snake.score then table.remove(snake.body, #snake.body) end
 end
 
 function love.draw()
+  lg.print(snake.score, 10,10)
   local x,y
 
   -- draw snake
@@ -52,9 +58,11 @@ function love.draw()
   end
 
   -- draw fruit
-  x = fruit[1]*CELL_SIZE
-  y = fruit[2]*CELL_SIZE
-  lg.rectangle("fill", x,y, CELL_SIZE,CELL_SIZE)
+  if #fruit > 1 then
+    x = fruit[1]*CELL_SIZE
+    y = fruit[2]*CELL_SIZE
+    lg.rectangle("fill", x,y, CELL_SIZE,CELL_SIZE)
+  end
 end
 
 function love.keypressed(key,scancode)
