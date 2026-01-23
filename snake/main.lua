@@ -25,7 +25,6 @@ KEYBINDS      = {
 local snake
 local fruit
 local pause
-local bg
 
 local function setColor(rgba)
   lg.setColor(love.math.colorFromBytes(unpack(rgba)))
@@ -78,12 +77,6 @@ function love.load()
 
   pause = false
 
-  bg = lg.newCanvas()
-  lg.setCanvas(bg)
-  setColor(BG_COLOR)
-  lg.rectangle("fill", 0,0, SCREEN_WIDTH,SCREEN_HEIGHT)
-  lg.setCanvas()
-
   lg.setFont(lg.newFont(16))
 end
 
@@ -119,8 +112,7 @@ end
 
 function love.draw()
   -- draw background
-  setColor({255,255,255})
-  lg.draw(bg, 0,0)
+  lg.clear(love.math.colorFromBytes(unpack(BG_COLOR)))
 
   -- draw snake
   for k,pos in pairs(snake.body) do
