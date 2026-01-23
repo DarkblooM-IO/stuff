@@ -9,7 +9,8 @@ SCREEN_WIDTH  = lg.getWidth()
 SCREEN_HEIGHT = lg.getHeight()
 DIR           = {UP = "up", LEFT = "left", DOWN = "down", RIGHT = "right"}
 GAME_SPEED    = .09
-SNAKE_COLOR   = {163,190,140}
+BG_COLOR      = {163,190,140}
+SNAKE_COLOR   = {HEAD = {129,161,193}, BODY = {94,129,172}}
 FRUIT_COLOR   = {191,97,106}
 KEYBINDS      = {
   UP = "up",
@@ -21,6 +22,11 @@ KEYBINDS      = {
   QUIT = "escape"
 }
 
+local snake
+local fruit
+local pause
+local bg
+
 local function setColor(rgba)
   lg.setColor(love.math.colorFromBytes(unpack(rgba)))
 end
@@ -28,17 +34,26 @@ end
 local function drawCell(pos, color, mode)
   local x = pos[1]*CELL_SIZE
   local y = pos[2]*CELL_SIZE
+  setColor({0,0,0})
+  lg.rectangle("line", x,y, CELL_SIZE,CELL_SIZE)
   setColor(color or {255,255,255})
   lg.rectangle(mode or "fill", x,y, CELL_SIZE,CELL_SIZE)
 end
 
-local function randomCell()
-  return {math.random(1,(SCREEN_WIDTH/CELL_SIZE)-1),math.random(1,(SCREEN_HEIGHT/CELL_SIZE)-1)}
+local function sameCell(c1, c2)
+  if c1 and c2 then
+    return c1[1] == c2[1] and c1[2] == c2[2]
+  end
+  return false
 end
 
-local snake
-local fruit
-local pause
+local function randomCell()
+  local newcell = {math.random(1,(SCREEN_WIDTH/CELL_SIZE)-1),math.random(1,(SCREEN_HEIGHT/CELL_SIZE)-1)}
+  local collide = false
+  for _,cell in pairs(snake.body) do if sameCell(newcell,cell) then collide = true end end
+  if sameCell(newcell,fruit) then collide = true end
+  return collide and randomCell() or newcell
+end
 
 function love.load()
   math.randomseed(os.time())
@@ -62,6 +77,14 @@ function love.load()
   fruit = randomCell()
 
   pause = false
+
+  bg = lg.newCanvas()
+  lg.setCanvas(bg)
+  setColor(BG_COLOR)
+  lg.rectangle("fill", 0,0, SCREEN_WIDTH,SCREEN_HEIGHT)
+  lg.setCanvas()
+
+  lg.setFont(lg.newFont(16))
 end
 
 function love.update(dt)
@@ -95,12 +118,14 @@ function love.update(dt)
 end
 
 function love.draw()
-  local x,y
+  -- draw background
+  setColor({255,255,255})
+  lg.draw(bg, 0,0)
 
   -- draw snake
-  for _,pos in pairs(snake.body) do
-    drawCell(pos, {0,0,0}, "line")
-    drawCell(pos, SNAKE_COLOR)
+  for k,pos in pairs(snake.body) do
+    local color = k == 1 and SNAKE_COLOR.HEAD or SNAKE_COLOR.BODY
+    drawCell(pos, color)
   end
 
   -- draw fruit
@@ -108,8 +133,7 @@ function love.draw()
 
   -- print game status
   if snake.dead or pause then
-    setColor({255,255,255})
-
+    setColor({0,0,0})
     local msg = string.format(
       [[%s
 score: %d
