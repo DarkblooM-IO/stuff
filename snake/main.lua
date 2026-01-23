@@ -1,7 +1,8 @@
+love.mouse.setVisible(false)
+
 local tick = require "lib.tick"
 
 _G.lg = love.graphics
-_G.lk = love.keyboard
 
 CELL_SIZE     = 20
 SCREEN_WIDTH  = lg.getWidth()
@@ -21,6 +22,7 @@ end
 
 local snake
 local fruit
+local pause
 
 function love.load()
   math.randomseed(os.time())
@@ -42,11 +44,13 @@ function love.load()
   end
 
   fruit = randomCell()
+
+  pause = false
 end
 
 function love.update()
   -- don't do anything if dead
-  if snake.dead then return end
+  if snake.dead or pause then return end
 
   -- apply next direction
   snake.facing = snake.buffer
@@ -75,19 +79,7 @@ function love.update()
 end
 
 function love.draw()
-  if snake.dead then
-    lg.print("yout died!", 10,10)
-    lg.print(string.format("score: %d", snake.score), 10,30)
-    lg.print("press r to restart", 10,50)
-  end
-
   local x,y
-
-  -- draw fruit
-  x = fruit[1]*CELL_SIZE
-  y = fruit[2]*CELL_SIZE
-  setColor(FRUIT_COLOR)
-  lg.rectangle("fill", x,y, CELL_SIZE,CELL_SIZE)
 
   -- draw snake
   for _,pos in pairs(snake.body) do
@@ -99,20 +91,45 @@ function love.draw()
     lg.rectangle("fill", x,y, CELL_SIZE,CELL_SIZE)
   end
 
-  -- reset color
+  -- draw fruit
+  x = fruit[1]*CELL_SIZE
+  y = fruit[2]*CELL_SIZE
+  setColor(FRUIT_COLOR)
+  lg.rectangle("fill", x,y, CELL_SIZE,CELL_SIZE)
+
+  -- print game status
   setColor({255,255,255})
+  if snake.dead or pause then
+    lg.print(snake.dead and "you died!" or "game paused", 10,10)
+    lg.print(string.format("score: %d", snake.score), 10,30)
+    lg.print("press r to restart", 10,50)
+  end
 end
 
 function love.keypressed(key,scancode)
+  -- quit game
   if scancode == "escape" then love.event.quit() end
+
+  -- pause
+  if scancode == "p" and not snake.dead then
+    pause = not pause
+    return
+  end
+
+  -- restart
+  if scancode == "r" then
+    love.load()
+    return
+  end
 
   -- set next direction checking for opposites
   local f = snake.facing
-  if scancode == "w" and f ~= DIR.DOWN  then snake.buffer = DIR.UP    end
-  if scancode == "a" and f ~= DIR.RIGHT then snake.buffer = DIR.LEFT  end
-  if scancode == "s" and f ~= DIR.UP    then snake.buffer = DIR.DOWN  end
-  if scancode == "d" and f ~= DIR.LEFT  then snake.buffer = DIR.RIGHT end
+  if     scancode == "w" and f ~= DIR.DOWN  then snake.buffer = DIR.UP  
+  elseif scancode == "a" and f ~= DIR.RIGHT then snake.buffer = DIR.LEFT
+  elseif scancode == "s" and f ~= DIR.UP    then snake.buffer = DIR.DOWN
+  elseif scancode == "d" and f ~= DIR.LEFT  then snake.buffer = DIR.RIGHT end
+end
 
-  -- restart
-  if scancode == "r" and snake.dead then love.load() end
+function love.focus(f)
+  if not f then pause = true end
 end
