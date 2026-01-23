@@ -48,7 +48,7 @@ function love.load()
   pause = false
 end
 
-function love.update()
+function love.update(dt)
   -- don't do anything if dead
   if snake.dead or pause then return end
 
