@@ -11,6 +11,15 @@ DIR           = {UP = "up", LEFT = "left", DOWN = "down", RIGHT = "right"}
 GAME_SPEED    = .09
 SNAKE_COLOR   = {163,190,140}
 FRUIT_COLOR   = {191,97,106}
+KEYBINDS      = {
+  UP = "up",
+  LEFT = "left",
+  DOWN = "down",
+  RIGHT = "right",
+  PAUSE = "space",
+  RESTART = "r",
+  QUIT = "escape"
+}
 
 local function setColor(rgba)
   lg.setColor(love.math.colorFromBytes(unpack(rgba)))
@@ -98,36 +107,50 @@ function love.draw()
   drawCell(fruit, FRUIT_COLOR)
 
   -- print game status
-  setColor({255,255,255})
   if snake.dead or pause then
-    lg.print(snake.dead and "you died!" or "game paused", 10,10)
-    lg.print(string.format("score: %d", snake.score), 10,30)
-    lg.print("press r to restart", 10,50)
+    setColor({255,255,255})
+
+    local msg = string.format(
+      [[%s
+score: %d
+keybinds:
+  - move: %s, %s, %s, %s
+  - pause: %s
+  - restart: %s
+  - quit: %s]],
+      snake.dead and "you died!" or "game paused",
+      snake.score,
+      KEYBINDS.UP,KEYBINDS.LEFT,KEYBINDS.DOWN,KEYBINDS.RIGHT,
+      KEYBINDS.PAUSE,
+      KEYBINDS.RESTART,
+      KEYBINDS.QUIT
+    )
+    lg.print(msg, 10,10)
   end
 end
 
 function love.keypressed(key,scancode)
   -- quit game
-  if scancode == "escape" then love.event.quit() end
+  if scancode == KEYBINDS.QUIT then love.event.quit() end
 
   -- pause
-  if scancode == "space" and not snake.dead then
+  if scancode == KEYBINDS.PAUSE and not snake.dead then
     pause = not pause
     return
   end
 
   -- restart
-  if scancode == "r" then
+  if scancode == KEYBINDS.RESTART then
     love.load()
     return
   end
 
   -- set next direction checking for opposites
   local f = snake.facing
-  if     scancode == "up"    and f ~= DIR.DOWN  then snake.buffer = DIR.UP  
-  elseif scancode == "left"  and f ~= DIR.RIGHT then snake.buffer = DIR.LEFT
-  elseif scancode == "down"  and f ~= DIR.UP    then snake.buffer = DIR.DOWN
-  elseif scancode == "right" and f ~= DIR.LEFT  then snake.buffer = DIR.RIGHT end
+  if     scancode == KEYBINDS.UP    and f ~= DIR.DOWN  then snake.buffer = DIR.UP  
+  elseif scancode == KEYBINDS.LEFT  and f ~= DIR.RIGHT then snake.buffer = DIR.LEFT
+  elseif scancode == KEYBINDS.DOWN  and f ~= DIR.UP    then snake.buffer = DIR.DOWN
+  elseif scancode == KEYBINDS.RIGHT and f ~= DIR.LEFT  then snake.buffer = DIR.RIGHT end
 end
 
 function love.focus(f) if not f then pause = true end end
