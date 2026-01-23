@@ -7,7 +7,7 @@ CELL_SIZE     = 20
 SCREEN_WIDTH  = lg.getWidth()
 SCREEN_HEIGHT = lg.getHeight()
 DIR           = {UP = "up", LEFT = "left", DOWN = "down", RIGHT = "right"}
-GAME_SPEED    = .15
+GAME_SPEED    = .09
 SNAKE_COLOR   = {163,190,140}
 FRUIT_COLOR   = {191,97,106}
 
@@ -24,7 +24,6 @@ local fruit
 
 function love.load()
   math.randomseed(os.time())
-
   tick.rate = GAME_SPEED
   snake = {
     body   = {{0,0}},
@@ -54,7 +53,7 @@ function love.update()
   if f == DIR.RIGHT then newpos = {pos[1]+1, pos[2]}   end
 
   if newpos[1] == fruit[1] and newpos[2] == fruit[2] then
-    fruit = randomCell() -- todo: spawn new fruit
+    fruit = randomCell()
     snake.score = snake.score+1
   end
 
@@ -64,6 +63,8 @@ function love.update()
 end
 
 function love.draw()
+  if snake.dead then lg.print("dead", 10,10) end
+
   local x,y
 
   -- draw fruit
