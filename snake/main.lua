@@ -16,6 +16,13 @@ local function setColor(rgba)
   lg.setColor(love.math.colorFromBytes(unpack(rgba)))
 end
 
+local function drawCell(pos, color, mode)
+  local x = pos[1]*CELL_SIZE
+  local y = pos[2]*CELL_SIZE
+  setColor(color or {255,255,255})
+  lg.rectangle(mode or "fill", x,y, CELL_SIZE,CELL_SIZE)
+end
+
 local function randomCell()
   return {math.random(1,(SCREEN_WIDTH/CELL_SIZE)-1),math.random(1,(SCREEN_HEIGHT/CELL_SIZE)-1)}
 end
@@ -83,19 +90,12 @@ function love.draw()
 
   -- draw snake
   for _,pos in pairs(snake.body) do
-    x = pos[1]*CELL_SIZE
-    y = pos[2]*CELL_SIZE
-    setColor({0,0,0})
-    lg.rectangle("line", x,y, CELL_SIZE,CELL_SIZE)
-    setColor(SNAKE_COLOR)
-    lg.rectangle("fill", x,y, CELL_SIZE,CELL_SIZE)
+    drawCell(pos, {0,0,0}, "line")
+    drawCell(pos, SNAKE_COLOR)
   end
 
   -- draw fruit
-  x = fruit[1]*CELL_SIZE
-  y = fruit[2]*CELL_SIZE
-  setColor(FRUIT_COLOR)
-  lg.rectangle("fill", x,y, CELL_SIZE,CELL_SIZE)
+  drawCell(fruit, FRUIT_COLOR)
 
   -- print game status
   setColor({255,255,255})
@@ -111,7 +111,7 @@ function love.keypressed(key,scancode)
   if scancode == "escape" then love.event.quit() end
 
   -- pause
-  if scancode == "p" and not snake.dead then
+  if scancode == "space" and not snake.dead then
     pause = not pause
     return
   end
@@ -124,12 +124,10 @@ function love.keypressed(key,scancode)
 
   -- set next direction checking for opposites
   local f = snake.facing
-  if     scancode == "w" and f ~= DIR.DOWN  then snake.buffer = DIR.UP  
-  elseif scancode == "a" and f ~= DIR.RIGHT then snake.buffer = DIR.LEFT
-  elseif scancode == "s" and f ~= DIR.UP    then snake.buffer = DIR.DOWN
-  elseif scancode == "d" and f ~= DIR.LEFT  then snake.buffer = DIR.RIGHT end
+  if     scancode == "up"    and f ~= DIR.DOWN  then snake.buffer = DIR.UP  
+  elseif scancode == "left"  and f ~= DIR.RIGHT then snake.buffer = DIR.LEFT
+  elseif scancode == "down"  and f ~= DIR.UP    then snake.buffer = DIR.DOWN
+  elseif scancode == "right" and f ~= DIR.LEFT  then snake.buffer = DIR.RIGHT end
 end
 
-function love.focus(f)
-  if not f then pause = true end
-end
+function love.focus(f) if not f then pause = true end end
