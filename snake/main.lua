@@ -24,14 +24,23 @@ local fruit
 
 function love.load()
   math.randomseed(os.time())
+
   tick.rate = GAME_SPEED
+
   snake = {
-    body   = {{0,0}},
+    body   = {{1,1}},
     facing = "",
     score  = 0,
     dead   = false,
     buffer = "right"
   }
+  snake.collides = function (pos)
+    for _,cell in pairs(snake.body) do
+      if pos[1] == cell[1] and pos[2] == cell[2] then return true end
+    end
+    return false
+  end
+
   fruit = randomCell()
 end
 
@@ -55,6 +64,9 @@ function love.update()
   if newpos[1] == fruit[1] and newpos[2] == fruit[2] then
     fruit = randomCell()
     snake.score = snake.score+1
+  elseif newpos[1] < 0 or newpos[1] >= SCREEN_WIDTH/CELL_SIZE or newpos[2] < 0 or newpos[2] >= SCREEN_HEIGHT/CELL_SIZE or snake.collides(newpos) then
+    snake.dead = true
+    return
   end
 
   -- update snake position
@@ -63,26 +75,32 @@ function love.update()
 end
 
 function love.draw()
-  if snake.dead then lg.print("dead", 10,10) end
+  if snake.dead then
+    lg.print("yout died!", 10,10)
+    lg.print(string.format("score: %d", snake.score), 10,30)
+    lg.print("press r to restart", 10,50)
+  end
 
   local x,y
 
   -- draw fruit
-  setColor(FRUIT_COLOR)
   x = fruit[1]*CELL_SIZE
   y = fruit[2]*CELL_SIZE
+  setColor(FRUIT_COLOR)
   lg.rectangle("fill", x,y, CELL_SIZE,CELL_SIZE)
 
   -- draw snake
-  setColor(SNAKE_COLOR)
   for _,pos in pairs(snake.body) do
     x = pos[1]*CELL_SIZE
     y = pos[2]*CELL_SIZE
+    setColor({0,0,0})
+    lg.rectangle("line", x,y, CELL_SIZE,CELL_SIZE)
+    setColor(SNAKE_COLOR)
     lg.rectangle("fill", x,y, CELL_SIZE,CELL_SIZE)
   end
 
   -- reset color
-  setColor({0,0,0})
+  setColor({255,255,255})
 end
 
 function love.keypressed(key,scancode)
@@ -94,4 +112,7 @@ function love.keypressed(key,scancode)
   if scancode == "a" and f ~= DIR.RIGHT then snake.buffer = DIR.LEFT  end
   if scancode == "s" and f ~= DIR.UP    then snake.buffer = DIR.DOWN  end
   if scancode == "d" and f ~= DIR.LEFT  then snake.buffer = DIR.RIGHT end
+
+  -- restart
+  if scancode == "r" and snake.dead then love.load() end
 end
