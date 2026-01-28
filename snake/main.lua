@@ -1,8 +1,10 @@
 love.mouse.setVisible(false)
 
 local tick = require "lib.tick"
+local json = require "lib.json"
 
-_G.lg = love.graphics
+_G.lg  = love.graphics
+_G.lfs = love.filesystem
 
 CELL_SIZE     = 20
 SCREEN_WIDTH  = lg.getWidth()
@@ -12,19 +14,11 @@ GAME_SPEED    = .09
 BG_COLOR      = {163,190,140}
 SNAKE_COLOR   = {HEAD = {129,161,193}, BODY = {94,129,172}}
 FRUIT_COLOR   = {191,97,106}
-KEYBINDS      = {
-  UP = "up",
-  LEFT = "left",
-  DOWN = "down",
-  RIGHT = "right",
-  PAUSE = "space",
-  RESTART = "r",
-  QUIT = "escape"
-}
+KEYBINDS      = json.decode(lfs.read("config.json"))["KEYBINDS"]
 
 local snake
 local fruit
-local pause
+local pausle
 
 local function setColor(rgba)
   lg.setColor(love.math.colorFromBytes(unpack(rgba)))
@@ -130,7 +124,11 @@ function love.draw()
       [[%s
 score: %d
 keybinds:
-  - move: %s, %s, %s, %s
+  - move:
+    - up: %s
+    - left: %s
+    - down: %s
+    - right: %s
   - pause: %s
   - restart: %s
   - quit: %s]],
