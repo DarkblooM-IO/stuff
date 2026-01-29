@@ -25,13 +25,14 @@ CFG = lfs.getInfo(CFG_FILE) and json.decode(lfs.read(CFG_FILE)) or {
     PAUSE   = "space",
     RESTART = "r",
     QUIT    = "escape"
-  }
+  },
+  HIGH_SCORE = 0
 }
 KEYBINDS = CFG["KEYBINDS"]
 
 local snake
 local fruit
-local pausle
+local pause
 
 local function setColor(rgba)
   lg.setColor(love.math.colorFromBytes(unpack(rgba)))
@@ -40,8 +41,8 @@ end
 local function drawCell(pos, color, mode)
   local x = pos[1]*CELL_SIZE
   local y = pos[2]*CELL_SIZE
-  setColor({0,0,0})
-  lg.rectangle("line", x,y, CELL_SIZE,CELL_SIZE)
+  -- setColor({0,0,0})
+  -- lg.rectangle("line", x,y, CELL_SIZE,CELL_SIZE)
   setColor(color or {255,255,255})
   lg.rectangle(mode or "fill", x,y, CELL_SIZE,CELL_SIZE)
 end
@@ -111,6 +112,7 @@ function love.update(dt)
   if newpos[1] == fruit[1] and newpos[2] == fruit[2] then
     fruit = randomCell()
     snake.score = snake.score+1
+    if snake.score > CFG["HIGH_SCORE"] then CFG["HIGH_SCORE"] = snake.score end
   elseif newpos[1] < 0 or newpos[1] >= SCREEN_WIDTH/CELL_SIZE or newpos[2] < 0 or newpos[2] >= SCREEN_HEIGHT/CELL_SIZE or snake.collides(newpos) then
     snake.dead = true
     return
@@ -139,7 +141,7 @@ function love.draw()
     setColor({0,0,0})
     local msg = string.format(
       [[%s
-score: %d
+score: %d (best: %d)
 keybinds:
   - move:
     - up: %s
@@ -150,7 +152,7 @@ keybinds:
   - restart: %s
   - quit: %s]],
       snake.dead and "you died!" or "game paused",
-      snake.score,
+      snake.score, CFG["HIGH_SCORE"],
       KEYBINDS.UP,KEYBINDS.LEFT,KEYBINDS.DOWN,KEYBINDS.RIGHT,
       KEYBINDS.PAUSE,
       KEYBINDS.RESTART,
