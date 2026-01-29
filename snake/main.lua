@@ -14,7 +14,20 @@ GAME_SPEED    = .09
 BG_COLOR      = {163,190,140}
 SNAKE_COLOR   = {HEAD = {129,161,193}, BODY = {94,129,172}}
 FRUIT_COLOR   = {191,97,106}
-KEYBINDS      = json.decode(lfs.read("config.json"))["KEYBINDS"]
+
+CFG_FILE = "config.json"
+CFG = lfs.getInfo(CFG_FILE) and json.decode(lfs.read(CFG_FILE)) or {
+  KEYBINDS = {
+    UP      = "up",
+    LEFT    = "left",
+    DOWN    = "down",
+    RIGHT   = "right",
+    PAUSE   = "space",
+    RESTART = "r",
+    QUIT    = "escape"
+  }
+}
+KEYBINDS = CFG["KEYBINDS"]
 
 local snake
 local fruit
@@ -72,6 +85,10 @@ function love.load()
   pause = false
 
   lg.setFont(lg.newFont(16))
+end
+
+function love.quit()
+  lfs.write(CFG_FILE, json.encode(CFG))
 end
 
 function love.update(dt)
