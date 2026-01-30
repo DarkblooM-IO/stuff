@@ -41,8 +41,8 @@ end
 local function drawCell(pos, color, mode)
   local x = pos[1]*CELL_SIZE
   local y = pos[2]*CELL_SIZE
-  -- setColor({0,0,0})
-  -- lg.rectangle("line", x,y, CELL_SIZE,CELL_SIZE)
+  setColor({0,0,0})
+  lg.rectangle("line", x,y, CELL_SIZE,CELL_SIZE)
   setColor(color or {255,255,255})
   lg.rectangle(mode or "fill", x,y, CELL_SIZE,CELL_SIZE)
 end
